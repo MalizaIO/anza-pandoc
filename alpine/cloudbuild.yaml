@@ -3,4 +3,5 @@ steps:
   args: ['build', '-t', 'gcr.io/anza-maliza/anza-pandoc', '-f', 'alpine/Dockerfile', 'alpine']
 images:
 - 'gcr.io/anza-maliza/anza-pandoc'
-machineType: 'e2-highcpu-32'
+options:
+  machineType: 'e2-highcpu-32'
