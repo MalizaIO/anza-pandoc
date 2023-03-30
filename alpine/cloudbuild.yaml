@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/anza-maliza/anza-pandoc-extra', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/anza-maliza/anza-pandoc-extra']
+images: ['gcr.io/anza-maliza/anza-pandoc-extra']
