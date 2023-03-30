@@ -101,15 +101,13 @@ RUN apk --no-cache add \
 # LaTeX #################################################################
 FROM alpine-core as alpine-latex
 
-# NOTE: to maintainers, please keep this listing alphabetical.
+# NOTE: to maintainers, please keep this listing alphabetical
 RUN apk --no-cache add \
         fontconfig \
         freetype \
         gnupg \
         gzip \
-        perl \
         tar \
-        wget \
         xz
 
 # TeXLive binaries location
@@ -146,36 +144,16 @@ RUN echo "binary_x86_64-linuxmusl 1" >> /root/texlive.profile \
   && TERM=dumb luaotfload-tool --update \
   && chmod -R o+w /opt/texlive/texdir/texmf-var
 
-WORKDIR /data
-
-# extra ##############################################################
-FROM alpine-latex as alpine-extra
-
-ADD ../common/latex/texlive.profile /root/texlive.profile
-ADD ../common/extra/packages.txt /root/extra_packages.txt
-ADD ../common/extra/requirements.txt /root/extra_requirements.txt
-
-RUN apk --no-cache add py-pip python3
-
-RUN pip3 --no-cache-dir install -r /root/extra_requirements.txt \
-  && rm -f /root/extra_requirements.txt
-
-# Install Flask
-RUN pip3 --no-cache-dir install Flask
+# Install Flask and other dependencies
+RUN apk --no-cache add py-pip python3 \
+  && pip3 --no-cache-dir install Flask \
+  && rm -rf /var/cache/apk/*
 
 # Copy the Flask application
 COPY app.py /app.py
 
 # Set the entry point to run the Flask application
 ENTRYPOINT ["python3", "/app.py"]
-
-RUN sed -e 's/ *#.*$//' -e '/^ *$/d' /root/extra_packages.txt | \
-    xargs tlmgr install \
-  && rm -f /root/texlive.profile \
-           /root/extra_packages.txt
-
-RUN pip3 --no-cache-dir install -r /root/extra_requirements.txt \
-  && rm -f /root/extra_requirements.txt
 
 ARG TEMPLATES_DIR=/.pandoc/templates
 
