@@ -34,7 +34,7 @@ RUN git clone --branch=$pandoc_commit --depth=1 --quiet \
 # Remove the settings that ship with pandoc.
 RUN rm -f cabal.project
 
-COPY ./alpine/freeze/pandoc-$pandoc_commit.project.freeze \
+COPY ./freeze/pandoc-$pandoc_commit.project.freeze \
      /usr/src/pandoc/cabal.project.freeze
 
 # Install Haskell dependencies
@@ -128,9 +128,9 @@ ENV PATH="${texlive_bin}/default:${PATH}"
 WORKDIR /root
 
 # Installer scripts and config
-COPY common/latex/texlive.profile /root/texlive.profile
-COPY common/latex/install-texlive.sh /root/install-texlive.sh
-COPY common/latex/packages.txt /root/packages.txt
+ADD ../common/latex/texlive.profile /root/texlive.profile
+ADD ../common/latex/install-texlive.sh /root/install-texlive.sh
+ADD ../common/latex/packages.txt /root/packages.txt
 
 # TeXLive version to install (leave empty to use the latest version).
 ARG texlive_version=
@@ -151,9 +151,9 @@ WORKDIR /data
 # extra ##############################################################
 FROM alpine-latex as alpine-extra
 
-COPY common/latex/texlive.profile /root/texlive.profile
-COPY common/extra/packages.txt /root/extra_packages.txt
-COPY common/extra/requirements.txt /root/extra_requirements.txt
+ADD ../common/latex/texlive.profile /root/texlive.profile
+ADD ../common/extra/packages.txt /root/extra_packages.txt
+ADD ../common/extra/requirements.txt /root/extra_requirements.txt
 
 RUN apk --no-cache add py-pip python3
 
