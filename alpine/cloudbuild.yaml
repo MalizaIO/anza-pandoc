@@ -1,6 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/anza-maliza/anza-pandoc', '-f', 'alpine/Dockerfile', 'alpine']
-  machineType: 'e2-highcpu-32'
+  options:
+    machineType: 'e2-highcpu-32'
 images:
 - 'gcr.io/anza-maliza/anza-pandoc'
