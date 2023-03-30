@@ -155,7 +155,19 @@ COPY common/latex/texlive.profile /root/texlive.profile
 COPY common/extra/packages.txt /root/extra_packages.txt
 COPY common/extra/requirements.txt /root/extra_requirements.txt
 
-RUN apk --no-cache add py-pip
+RUN apk --no-cache add py-pip python3
+
+RUN pip3 --no-cache-dir install -r /root/extra_requirements.txt \
+  && rm -f /root/extra_requirements.txt
+
+# Install Flask
+RUN pip3 --no-cache-dir install Flask
+
+# Copy the Flask application
+COPY app.py /app.py
+
+# Set the entry point to run the Flask application
+ENTRYPOINT ["python3", "/app.py"]
 
 RUN sed -e 's/ *#.*$//' -e '/^ *$/d' /root/extra_packages.txt | \
     xargs tlmgr install \
