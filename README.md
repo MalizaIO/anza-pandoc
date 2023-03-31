@@ -1,8 +1,8 @@
-# Pandoc Cloudrun for Anza
+# anza-pandoc
 
 Author: Harmon Amakobe
 
-This project is a containerized Pandoc conversion service designed to be deployed on Google Cloud Run. The project is based on the [pandoc/dockerfiles](https://github.com/pandoc/dockerfiles) repository and uses the `pandoc/extra` image as the base image.
+anza-pandoc is a containerized Pandoc conversion service designed to be deployed on Google Cloud Run. I developed this for use with our Anza application and have open sourced it in case anyone else would like to use it. I had orginally forked the pandoc Github but have since extensively modified it. The project is based on the [pandoc/dockerfiles](https://github.com/pandoc/dockerfiles) repository and uses the `pandoc/extra` image as the base image.
 
 ## Repository structure
 
