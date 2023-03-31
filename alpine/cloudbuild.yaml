@@ -36,6 +36,7 @@ images:
     $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
 options:
   substitutionOption: ALLOW_LOOSE
+  machineType: E2_HIGHCPU_8
 substitutions:
   _DEPLOY_REGION: us-central1
   _TRIGGER_ID: b3eaaa19-5e0c-4646-bb1b-acf74eed00b7
@@ -46,4 +47,4 @@ tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
   - dockerfiles
-timeout: 5400s
+timeout: 7200s
