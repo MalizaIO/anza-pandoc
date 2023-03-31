@@ -47,3 +47,4 @@ tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
   - dockerfiles
+timeout: 5400s
