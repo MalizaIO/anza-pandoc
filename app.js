@@ -11,7 +11,7 @@ app.post('/', upload.single('file'), (req, res) => {
     const inputFormat = req.body.input_format;
     const outputFormat = req.body.output_format;
     const inputFile = req.file.path;
-    const outputFile = path.join('output', `output.${outputFormat}`);
+    const outputFile = path.join('/app/output', `output.${outputFormat}`);
 
     if (!inputFormat || !outputFormat) {
         res.status(400).send('Both input_format and output_format must be provided.');
