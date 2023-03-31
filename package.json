@@ -1,0 +1,14 @@
+{
+    "name": "anza-pandoc",
+    "version": "0.1.0",
+    "description": "anza-pandoc is a containerized Pandoc conversion service designed to be deployed on Google Cloud Run. It is based on the pandoc/dockerfiles repository and uses the pandoc/extra image as the base image.",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "dependencies": {
+      "express": "latest",
+      "multer": "latest"
+    }
+  }
+  
