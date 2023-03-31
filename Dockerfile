@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apk --no-cache add nodejs npm
 
 # Copy the package.json file
-COPY package.json /app/package.json
+COPY package.json /package.json
 
 # Install dependencies and add them to package.json
 RUN npm install --save express
