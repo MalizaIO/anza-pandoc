@@ -6,9 +6,12 @@ WORKDIR /app
 # Install Node.js, npm and other dependencies
 RUN apk --no-cache add nodejs npm
 
-# Copy the package.json file and install dependencies
+# Copy the package.json file
 COPY package.json /app/package.json
-RUN npm install
+
+# Install dependencies and add them to package.json
+RUN npm install --save express
+RUN npm install --save multer
 
 # Copy the Node.js application
 COPY app.js /app.js
