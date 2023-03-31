@@ -5,7 +5,7 @@ steps:
       - --context=.
       - --dockerfile=Dockerfile
       - --cache=true
-      - --cache-repo=$_AR_HOSTNAME/$PROJECT_ID/kaniko-cache
+      - --cache-repo=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy
       - --cache-dir=/kaniko/cache
       - >-
         --build-arg=BASE_IMAGE=pandoc/extra:latest
