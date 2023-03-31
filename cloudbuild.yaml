@@ -46,3 +46,4 @@ tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
   - anza-pandoc
+timeout: 5400s
