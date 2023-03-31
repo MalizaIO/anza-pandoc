@@ -46,6 +46,6 @@ docker build -t pandoc-cloudrun-for-anza .
 docker run -p 8080:8080 --rm pandoc-cloudrun-for-anza
 ```
 
-1. Access the service at http://localhost:8080/.
+1. Access the service at `http://localhost:8080/`
 
 To deploy the application on Google Cloud Run, follow the [Google Cloud Run documentation](https://cloud.google.com/run/docs/quickstarts/build-and-deploy).
