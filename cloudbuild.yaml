@@ -1,13 +1,12 @@
 steps:
-  - name: gcr.io/kaniko-project/executor:latest
+  - name: gcr.io/kaniko-project/executor:v1.6.0
     args:
       - --destination=$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
       - --context=.
       - --dockerfile=Dockerfile
       - --cache=true
       - --cache-repo=$_AR_HOSTNAME/$PROJECT_ID/kaniko-cache
-      - >-
-        --cache-dir=/kaniko/cache
+      - --cache-dir=/kaniko/cache
       - >-
         --build-arg=BASE_IMAGE=pandoc/extra:latest
     id: Build
@@ -37,15 +36,14 @@ images:
     $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
 options:
   substitutionOption: ALLOW_LOOSE
-  machineType: N1_HIGHCPU_8
 substitutions:
   _DEPLOY_REGION: us-central1
   _TRIGGER_ID: b3eaaa19-5e0c-4646-bb1b-acf74eed00b7
   _AR_HOSTNAME: us-central1-docker.pkg.dev
   _PLATFORM: managed
-  _SERVICE_NAME: dockerfiles
+  _SERVICE_NAME: anza-pandoc
 tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
-  - dockerfiles
+  - anza-pandoc
 timeout: 7200s
