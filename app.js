@@ -84,6 +84,7 @@ app.post('/', upload.single('file'), async (req, res) => {
     const inputFormat = req.body.input_format;
     const outputFormat = req.body.output_format;
     const inputFile = req.file.path;
+    const inputFileName = req.file.originalname;
 
     if (!inputFormat || !outputFormat || !userIdentifier) {
         res.status(400).send('The input_format, output_format, and userIdentifier arguments must be provided.');
@@ -96,14 +97,9 @@ app.post('/', upload.single('file'), async (req, res) => {
         await storage.bucket(bucketName).file(userFolder).save('');
     }
 
-    const [files] = await storage.bucket(bucketName).getFiles({
-        prefix: userFolder,
-    });
-    const resumeVersion = files.length + 1;
-
     // Determine the output extension based on the valid extensions
     const outputExtension = validOutputExtensions[outputFormat] || outputFormat;
-    const outputFileName = `ResumeV${resumeVersion}.${outputExtension}`;
+    const outputFileName = `${inputFileName}.${outputExtension}`;
     const outputFile = path.join('/app/output', outputFileName);
 
     execFile(
