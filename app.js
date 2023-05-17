@@ -84,7 +84,8 @@ app.post('/', upload.single('file'), async (req, res) => {
     const inputFormat = req.body.input_format;
     const outputFormat = req.body.output_format;
     const inputFile = req.file.path;
-    const inputFileName = req.file.originalname;
+    const inputFileNameWithExtension = req.file.originalname;
+    const fileName = path.parse(inputFileNameWithExtension).name;
 
     if (!inputFormat || !outputFormat || !userIdentifier) {
         res.status(400).send('The input_format, output_format, and userIdentifier arguments must be provided.');
@@ -99,7 +100,7 @@ app.post('/', upload.single('file'), async (req, res) => {
 
     // Determine the output extension based on the valid extensions
     const outputExtension = validOutputExtensions[outputFormat] || outputFormat;
-    const outputFileName = `${inputFileName}.${outputExtension}`;
+    const outputFileName = `${fileName}.${outputExtension}`;
     const outputFile = path.join('/app/output', outputFileName);
 
     execFile(
