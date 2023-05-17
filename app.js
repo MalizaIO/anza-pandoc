@@ -86,7 +86,7 @@ app.post('/', upload.single('file'), async (req, res) => {
     const inputFile = req.file.path;
 
     if (!inputFormat || !outputFormat || !userIdentifier) {
-        res.status(400).send('Both input_format, output_format, and userIdentifier must be provided.');
+        res.status(400).send('The input_format, output_format, and userIdentifier arguments must be provided.');
         return;
     }
 

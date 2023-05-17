@@ -9,19 +9,19 @@ anza-pandoc is a containerized Pandoc conversion service designed to be deployed
 Go into your chosen terminal and run the following:
 
 ```bash
-curl -X POST -F "file=@INPUT_FILENAME" -F "input_format=INPUT_FORMAT" -F "output_format=OUTPUT_FORMAT" https://anza-pandoc-hbm333kvpq-uc.a.run.app
+curl -F "input_format=INPUT_FORMAT" -F "output_format=OUTPUT_FORMAT" -F "file=@INPUT_FILENAME" -F "userIdentifier=USER_ID" https://anza-pandoc-hbm333kvpq-uc.a.run.app
 ```
 
-Replace INPUT_FILENAME with the path/to/your/input/file and make sure that you include the extension.
+Replace INPUT_FILENAME with the path/to/your/input/file and make sure that you include the extension. 
 
-NOTE: I changed the code to output a download link to the output file - so you can omit "> OUTPUT_FILENAME" and it will spit out a link.
+The USER_ID is a unique identifier in order to create a separate bucket for conversions.
 
 For input_format and output_format, please follow the [conventions set by pandoc](https://pandoc.org/MANUAL.html).
 
 For example, in my terminal, I navigated to a folder that contains my resume as a docx file, and ran the following:
 
 ```bash
-curl -F "input_format=docx" -F "output_format=markdown" -F "file=@resume.docx" https://anza-pandoc-hbm333kvpq-uc.a.run.app
+curl -F "input_format=docx" -F "output_format=markdown" -F "file=@Harmon Amakobe - Resume.docx" -F "userIdentifier=KobeWanKenobi" https://anza-pandoc-hbm333kvpq-uc.a.run.app
 ```
 
 ## Repository structure
