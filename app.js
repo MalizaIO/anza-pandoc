@@ -92,14 +92,17 @@ app.post('/', upload.single('file'), async (req, res) => {
     ? path.parse(inputFileNameWithExtension).name
     : null;
 
-  if ((!inputContent && !inputFile) || !inputMethod || !outputFormat || !userIdentifier) {
-    res
-      .status(400)
-      .send(
-        'Invalid request parameters. The content or file field, inputMethod, outputFormat, and userIdentifier must be provided.'
-      );
-    return;
-  }
+    if (
+        (inputMethod === 'content' && !inputContent) ||
+        (inputMethod === 'file' && !inputFile) ||
+        (inputMethod === 'fileUrl' && !req.body.fileUrl) ||
+        !inputMethod ||
+        !outputFormat ||
+        !userIdentifier
+      ) {
+        res.status(400).send('Invalid request parameters. The required fields for the chosen input method, outputFormat, and userIdentifier must be provided.');
+        return;
+      }
 
   const userFolder = `${userIdentifier}/`;
   const folderExists = await storage.bucket(bucketName).file(userFolder).exists();
