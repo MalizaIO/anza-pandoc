@@ -179,6 +179,7 @@ app.post('/', upload.single('file'), async (req, res) => {
         await storage.bucket(bucketName).upload(outputFile, {
           destination: path.join(userFolder, outputFileName),
           public: true,
+          overwrite: true,
         });
         const downloadUrl = `https://storage.googleapis.com/${bucketName}/${userFolder}${outputFileName}`;
         res.send({ download_url: downloadUrl });
