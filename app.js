@@ -81,14 +81,15 @@ const validOutputExtensions = {
 
 app.post('/', upload.single('file'), async (req, res) => {
     const userIdentifier = req.body.userIdentifier;
-    const inputFormat = req.body.input_format;
-    const outputFormat = req.body.output_format;
-    const inputFile = req.file.path;
-    const inputFileNameWithExtension = req.file.originalname;
-    const fileName = path.parse(inputFileNameWithExtension).name;
+    const inputContent = req.body.content;
+    const inputFormat = req.body.inputFormat || 'markdown';
+    const outputFormat = req.body.outputFormat;
+    const inputFile = req.file ? req.file.path : null;
+    const inputFileNameWithExtension = req.file ? req.file.originalname : null;
+    const fileName = inputFileNameWithExtension ? path.parse(inputFileNameWithExtension).name : null;
 
-    if (!inputFormat || !outputFormat || !userIdentifier) {
-        res.status(400).send('The input_format, output_format, and userIdentifier arguments must be provided.');
+    if ((!inputContent && !inputFile) || !outputFormat || !userIdentifier) {
+        res.status(400).send('Invalid request parameters. The content or file field, outputFormat, and userIdentifier must be provided.');
         return;
     }
 
@@ -98,14 +99,43 @@ app.post('/', upload.single('file'), async (req, res) => {
         await storage.bucket(bucketName).file(userFolder).save('');
     }
 
+    // Determine the input source (content or file)
+    let inputSource;
+    let inputExtension;
+
+    if (inputContent) {
+        // Use content as input
+        inputSource = inputContent;
+        inputExtension = 'md';
+    } else {
+        // Use uploaded file as input
+        inputSource = inputFile;
+        inputExtension = path.extname(inputFileNameWithExtension).toLowerCase().substr(1);
+    }
+
     // Determine the output extension based on the valid extensions
     const outputExtension = validOutputExtensions[outputFormat] || outputFormat;
-    const outputFileName = `${fileName}.${outputExtension}`;
+    const outputFileName = `${fileName || 'converted'}.${outputExtension}`;
     const outputFile = path.join('/app/output', outputFileName);
+
+    // Write inputContent to a temporary Markdown file
+    const tempInputFile = `/app/input/input.md`;
+
+    try {
+        fs.writeFileSync(tempInputFile, inputContent);
+    } catch (writeError) {
+        res.status(500).send('Error writing input content to file');
+        return;
+    }
+
+    // Use the temporary Markdown file as input source
+    inputSource = tempInputFile;
+    inputExtension = 'md';
+
 
     execFile(
         'pandoc',
-        ['-f', inputFormat, '-t', outputFormat, inputFile, '-o', outputFile],
+        ['-f', inputFormat, '-t', outputFormat, inputSource, '-o', outputFile],
         async (error) => {
             if (error) {
                 res.status(500).send(`Pandoc conversion failed: ${error.message}`);
@@ -121,11 +151,13 @@ app.post('/', upload.single('file'), async (req, res) => {
                     console.error(uploadError);
                     res.status(500).send('Error uploading file to Google Cloud Storage');
                 } finally {
-                    fs.unlink(inputFile, (deleteInputError) => {
-                        if (deleteInputError) {
-                            console.error(deleteInputError);
-                        }
-                    });
+                    if (inputFile) {
+                        fs.unlink(inputFile, (deleteInputError) => {
+                            if (deleteInputError) {
+                                console.error(deleteInputError);
+                            }
+                        });
+                    }
                     fs.unlink(outputFile, (deleteOutputError) => {
                         if (deleteOutputError) {
                             console.error(deleteOutputError);
@@ -136,6 +168,7 @@ app.post('/', upload.single('file'), async (req, res) => {
         }
     );
 });
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
