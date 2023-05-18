@@ -116,12 +116,21 @@ app.post('/', upload.single('file'), async (req, res) => {
 
   if (inputMethod === 'content') {
     // Use content as input
+    const tempInputDir = '/app/input';
+    inputExtension = 'md';
+    const tempInputFile = `${tempInputDir}/input.${inputExtension}`;
+
+    if (!fs.existsSync(tempInputDir)) {
+      fs.mkdirSync(tempInputDir);
+    }
+
+    fs.writeFileSync(tempInputFile, inputContent);
+
+    inputSource = tempInputFile;
     if (!inputContent) {
       res.status(400).send('Invalid request parameters. Content must be provided when using inputMethod: content.');
       return;
     }
-    inputSource = inputContent;
-    inputExtension = 'md';
   } else if (inputMethod === 'file') {
     // Use uploaded file as input
     if (!inputFile) {
