@@ -119,14 +119,18 @@ app.post('/', upload.single('file'), async (req, res) => {
     const outputFile = path.join('/app/output', outputFileName);
 
     // Write inputContent to a temporary Markdown file
-    const tempInputFile = `/app/input/input.md`;
-
+    const tempInputDir = '/app/input';
+    const tempInputFile = `${tempInputDir}/input.md`;
+    
     try {
+        if (!fs.existsSync(tempInputDir)) {
+            fs.mkdirSync(tempInputDir);
+        }
         fs.writeFileSync(tempInputFile, inputContent);
-      } catch (writeError) {
+    } catch (writeError) {
         res.status(500).send(`Error writing input content to file: ${writeError.message}`);
         return;
-      }
+    }
       
 
     // Use the temporary Markdown file as input source
