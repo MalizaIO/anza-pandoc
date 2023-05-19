@@ -9,6 +9,13 @@ const axios = require('axios');
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 
+// Middleware to enable CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 // Replace with your own Google Cloud Storage bucket name
 const bucketName = 'anza-maliza.appspot.com';
 const storage = new Storage();
